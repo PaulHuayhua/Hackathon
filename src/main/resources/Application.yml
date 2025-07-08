@@ -1,0 +1,17 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:14033;databaseName=t07_InventaStore;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: Admin12345
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  sql:
+    init:
+      mode: always
