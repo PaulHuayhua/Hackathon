@@ -1,0 +1,137 @@
+<div class="student-container">
+    <div class="header">
+        <mat-icon class="header-icon">group</mat-icon>
+        <h2>Listado de Estudiante</h2>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters">
+        <div class="filter-row">
+
+            <!-- Búsqueda -->
+            <div class="filter-group">
+                <label>Buscar:</label>
+                <input type="text" [(ngModel)]="filter.searchText" (input)="onSearchTextChange()"
+                    placeholder="Buscar por nombre, DNI, etc." />
+            </div>
+
+            <!-- Programa académico -->
+            <div class="filter-group">
+                <label>Programa Académico:</label>
+                <select [(ngModel)]="filter.academicProgram" (change)="onAcademicProgramChange()">
+                    <option value="">Todos</option>
+                    <option *ngFor="let program of academicPrograms" [value]="program">{{ program }}</option>
+                </select>
+            </div>
+
+
+            <!-- Estado -->
+            <div class="filter-group">
+                <label>Estado:</label>
+                <select [(ngModel)]="filter.state" (change)="onStateChange()">
+                    <option value="">Todos</option>
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+
+            <!-- Departamento -->
+            <div class="filter-group">
+                <label>Departamento:</label>
+                <select [(ngModel)]="filter.department" (change)="onDepartmentChange()">
+                    <option value="">Todos</option>
+                    <option *ngFor="let dep of departments" [value]="dep.id">{{ dep.name }}</option>
+                </select>
+            </div>
+
+            <!-- Provincia -->
+            <div class="filter-group">
+                <label>Provincia:</label>
+                <select [(ngModel)]="filter.province" (change)="onProvinceChange()" [disabled]="!filter.department">
+                    <option value="">Todos</option>
+                    <option *ngFor="let prov of provinces" [value]="prov.id">{{ prov.name }}</option>
+                </select>
+            </div>
+
+            <!-- Distrito -->
+            <div class="filter-group">
+                <label>Distrito:</label>
+                <select [(ngModel)]="filter.district" (change)="onDistrictChange()" [disabled]="!filter.province">
+                    <option value="">Todos</option>
+                    <option *ngFor="let dist of districts" [value]="dist.id">{{ dist.name }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de registrar -->
+    <div class="actions">
+        <button mat-raised-button color="primary" [routerLink]="['/students/new']">
+            <mat-icon>person_add</mat-icon>
+            Registrar Estudiante
+        </button>
+        <button mat-raised-button color="accent" (click)="reportPdf()">
+            <mat-icon>picture_as_pdf</mat-icon>
+            Exportar PDF
+        </button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-wrapper">
+        <table class="student-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>DNI</th>
+                    <th>Género</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Dirección</th>
+                    <th>Ubicación</th>
+                    <th>Programa</th>
+                    <th>Ciclo</th>
+                    <th>Registro</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td>{{ student.code }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.lastName }}</td>
+                    <td>{{ student.dni }}</td>
+                    <td>{{ student.gender === 'M' ? 'Masculino' : 'Femenino' }}</td>
+                    <td>{{ student.phone }}</td>
+                    <td>{{ student.email }}</td>
+                    <td>{{ student.address }}</td>
+                    <td>{{ student.department }} / {{ student.province }} / {{ student.district }}</td>
+                    <td>{{ student.academicProgram }}</td>
+                    <td>{{ student.academicCycle }}</td>
+                    <td>{{ student.dateRegistration | date: 'dd/MM/yyyy' }}</td>
+                    <td>
+                        <span [ngClass]="student.state ? 'estado activo' : 'estado inactivo'">
+                            {{ student.state ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-edit" [routerLink]="['/students/edit', student.id]">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="btn btn-delete" *ngIf="student.state" (click)="deleteStudent(student.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button class="btn btn-restore" *ngIf="!student.state" (click)="restoreStudent(student.id)">
+                            <mat-icon>restore</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="students.length === 0">
+                    <td colspan="14" class="no-data">No se encontraron estudiantes con los filtros aplicados.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
