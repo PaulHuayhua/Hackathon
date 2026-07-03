@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hackathon-deployment
+  namespace: hackathon-ns
+spec:
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: hackathon
+  template:
+    metadata:
+      labels:
+        app: hackathon
+    spec:
+      containers:
+      - name: hackathon
+        image: paulhuayhua/hackathon:latest
+
+        ports:
+        - containerPort: 8083
+
+        resources:
+          limits:
+            memory: "528Mi"
+            cpu: "500m"
+
+          requests:
+            memory: "256Mi"
+            cpu: "250m"

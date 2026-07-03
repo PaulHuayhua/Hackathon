@@ -1,0 +1,11 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: ms-students
+
+  r2dbc:
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://neondb_owner:npg_j3TvBXkeU0KH@ep-little-king-at4oe1qz-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require}
+    username: ${SPRING_R2DBC_USERNAME:neondb_owner}
+    password: ${SPRING_R2DBC_PASSWORD:npg_j3TvBXkeU0KH}
